@@ -2,16 +2,23 @@
   "name": "colcoffee",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "truffle.js",
   "scripts": {
     "dev": "lite-server",
     "contracts:compile": "truffle compile",
+    "contracts:migrate": "truffle migrate",
+    "contracts:deploy": "truffle migrate --reset --network rinkeby",
     "ethereum:client": "ganache-cli -m \"spirit supply whale amount human item harsh scare congress discover talent hamster\"",
     "test": "truffle test"
   },
   "keywords": [],
   "author": "Andres Cabrera <andrescabsi@gmail.com>",
   "license": "MIT",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "truffle": "^5.1.2",
+    "truffle-hdwallet-provider": "^1.0.17"
+  },
   "devDependencies": {
     "lite-server": "2.4.0"
   }

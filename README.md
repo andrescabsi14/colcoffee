@@ -60,4 +60,4 @@ A coffee supply management DApp.
 
 ## Diagrams
 
-![image](https://drive.google.com/uc?export=view&id=1tSxrn6MmoL7txkG_aNW7zknVD6JJbPo8)
+![image](https://doc-0s-9o-docs.googleusercontent.com/docs/securesc/2r4340lpeunvuf1635u5phe7v9k4t2uu/5ijrp3oj9vs8b1gku6qhlirhituoh1dt/1580148000000/05690110511480756670/05690110511480756670/1tSxrn6MmoL7txkG_aNW7zknVD6JJbPo8?e=view&authuser=1&nonce=9fr3ffigh8ei8&user=05690110511480756670&hash=nhcohrs02ctv3k0f21st33tfsttk9jdh)

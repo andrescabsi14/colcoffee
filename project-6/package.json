@@ -1,14 +1,16 @@
 {
-  "name": "supply-chain-E",
+  "name": "colcoffee",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "lite-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "contracts:compile": "truffle compile",
+    "ethereum:client": "ganache-cli -m \"spirit supply whale amount human item harsh scare congress discover talent hamster\"",
+    "test": "truffle test"
   },
   "keywords": [],
-  "author": "pk <pkrasam@gmail.com> (https://ipfs.infura.io/ipfs/QmSXiR9Khm3yo1J67nUopvVBxFJ8YGN2fUGZ34Etr3m92x/)",
+  "author": "Andres Cabrera <andrescabsi@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "lite-server": "2.4.0"

@@ -65,4 +65,4 @@ A coffee supply management DApp.
 
 ## Diagrams
 
-![Image](./images/ColCoffeeDiagrams.svg?raw=true)
+![header image](https://github.com/andrescabsi14/colcoffee/blob/master/images/ColCoffeeDiagrams.svg)

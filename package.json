@@ -1,0 +1,22 @@
+{
+  "name": "colcoffee",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docker:build": "docker build -t colcoffee:2 .",
+    "docker:run": "docker run --init --rm -p 3000:3000 -it colcoffee:2",
+    "docker:ash": "docker run --init --rm -p 3000:3000 -it colcoffee:2 sh",
+    "docker:inspect": "docker inspect colcoffee:2",
+    "truffle": "truffle develop"
+  },
+  "keywords": [],
+  "author": "Andres Cabrera <andrescabsi@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "truffle": "^5.1.10"
+  }
+}

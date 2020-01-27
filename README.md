@@ -54,7 +54,7 @@ A coffee supply management DApp.
 
 ## Transaction
 
-<a href="https://rinkeby.etherscan.io/tx/0xf1f734509e49e660db72c7a275e4c27ce628e84dfabf8f426fe77a633025003e" target="_blank">Deploy Tx: 0xf1f734509e49e660db72c7a275e4c27ce628e84dfabf8f426fe77a633025003e</a>
+**Deploy Tx:** <a href="https://rinkeby.etherscan.io/tx/0xf1f734509e49e660db72c7a275e4c27ce628e84dfabf8f426fe77a633025003e" target="_blank">0xf1f734509e49e660db72c7a275e4c27ce628e84dfabf8f426fe77a633025003e</a>
 
 ## Program version numbers
 

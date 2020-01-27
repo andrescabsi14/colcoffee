@@ -34,7 +34,7 @@ contract ConsumerRole {
 
     // Define a function 'isConsumer' to check this role
     function isConsumer(address account) public view returns (bool) {
-        return consumer.has(account);
+        return consumers.has(account);
     }
 
     // Define a function 'addConsumer' that adds this role

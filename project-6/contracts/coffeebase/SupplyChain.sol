@@ -1,6 +1,15 @@
 pragma solidity ^0.4.24;
+import "../coffeeaccesscontrol/FarmerRole.sol";
+import "../coffeeaccesscontrol/DistributorRole.sol";
+import "../coffeeaccesscontrol/RetailerRole.sol";
+import "../coffeeaccesscontrol/ConsumerRole.sol";
 // Define a contract 'Supplychain'
-contract SupplyChain {
+contract SupplyChain is
+    FarmerRole,
+    DistributorRole,
+    RetailerRole,
+    ConsumerRole
+{
     // Define 'owner'
     address owner;
 
@@ -191,15 +200,21 @@ contract SupplyChain {
     ) public {
         // Add the new item as part of Harvest
         items[_upc] = Item({
-            sku: sku,
+            sku: _upc,
             upc: _upc,
-            ownerID: _originFarmerID,
+            ownerID: msg.sender,
             originFarmerID: _originFarmerID,
             originFarmName: _originFarmName,
             originFarmInformation: _originFarmInformation,
             originFarmLatitude: _originFarmLatitude,
             originFarmLongitude: _originFarmLongitude,
-            productNotes: _productNotes
+            productID: _upc + sku,
+            productNotes: _productNotes,
+            productPrice: 0,
+            itemState: State.Harvested,
+            distributorID: address(0),
+            retailerID: address(0),
+            consumerID: address(0)
         });
 
         // Increment sku
@@ -310,8 +325,13 @@ contract SupplyChain {
     // Use the above modifiers to check if the item is received
     function purchaseItem(uint256 _upc)
         public
+        payable
         // Call modifier to check if upc has passed previous supply chain stage
         received(_upc)
+        // Call modifer to check if buyer has paid enough
+        paidEnough(items[_upc].productPrice)
+        // Call modifer to send any excess ether back to buyer
+        checkValue(upc)
         // Access Control List enforced by calling Smart Contract / DApp
         onlyConsumer()
     {
@@ -319,7 +339,12 @@ contract SupplyChain {
         items[_upc].ownerID = msg.sender;
         items[_upc].consumerID = msg.sender;
         items[_upc].itemState = State.Purchased;
+
+        // Transfer money to farmer
+        items[_upc].retailerID.transfer(items[_upc].productPrice);
+
         // Emit the appropriate event
+        emit Purchased(_upc);
     }
 
     // Define a function 'fetchItemBufferOne' that fetches the data
@@ -338,6 +363,14 @@ contract SupplyChain {
         )
     {
         // Assign values to the 8 parameters
+        itemSKU = items[_upc].sku;
+        itemUPC = items[_upc].upc;
+        ownerID = items[_upc].ownerID;
+        originFarmerID = items[_upc].originFarmerID;
+        originFarmName = items[_upc].originFarmName;
+        originFarmInformation = items[_upc].originFarmInformation;
+        originFarmLatitude = items[_upc].originFarmLatitude;
+        originFarmLongitude = items[_upc].originFarmLongitude;
 
         return (
             itemSKU,
@@ -368,6 +401,16 @@ contract SupplyChain {
         )
     {
         // Assign values to the 9 parameters
+
+        itemSKU = items[_upc].sku;
+        itemUPC = items[_upc].upc;
+        productID = items[_upc].productID;
+        productNotes = items[_upc].productNotes;
+        productPrice = items[_upc].productPrice;
+        itemState = uint256(items[_upc].itemState); // enum to uint256
+        distributorID = items[_upc].distributorID;
+        retailerID = items[_upc].retailerID;
+        consumerID = items[_upc].consumerID;
 
         return (
             itemSKU,

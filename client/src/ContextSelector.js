@@ -1,4 +1,5 @@
 import React from "react";
+import { Typography } from "@material-ui/core";
 
 import { CONTEXT } from "./App";
 
@@ -6,13 +7,29 @@ import ProductOverview from "./ProductOverview";
 import FarmDetails from "./FarmDetails";
 import ProductDetails from "./ProductDetails";
 
-const ContextSelector = ({ userContext }) => {
+const ContextSelector = ({
+  web3,
+  account,
+  supplyContract,
+  userContext,
+  txHistory,
+  metamaskAddress,
+  upc
+}) => {
   switch (userContext) {
     case CONTEXT.farmer: {
       return (
         <>
-          <h2>Farmer</h2>
-          <FarmDetails />
+          <Typography variant="h3">Farmer</Typography>
+          <FarmDetails
+            web3={web3}
+            account={account}
+            supplyContract={supplyContract}
+            userContext={userContext}
+            txHistory={txHistory}
+            metamaskAddress={metamaskAddress}
+            upc={upc}
+          />
           <ProductOverview />
         </>
       );

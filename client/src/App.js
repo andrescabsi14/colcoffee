@@ -1,8 +1,7 @@
 import React from "react";
-
+import { CircularProgress } from "@material-ui/core";
 import TxHistory from "./TxHistory";
 import ContextSelector from "./ContextSelector";
-// import { default as TruffleContract } from "@truffle/contract";
 
 import getWeb3 from "./getWeb3";
 
@@ -23,7 +22,8 @@ class App extends React.Component {
     userContext: "",
     txHistory: "",
     metamaskAddress: "",
-    upc: "1"
+    upc: "1",
+    loading: true
   };
 
   fetchItemBufferOne = async () => {
@@ -93,7 +93,8 @@ class App extends React.Component {
         {
           web3,
           account,
-          supplyContract: supplyContractInstance
+          supplyContract: supplyContractInstance,
+          loading: false
         },
         () => {
           // Fetch item
@@ -118,7 +119,16 @@ class App extends React.Component {
   };
 
   render() {
-    const { userContext, txHistory } = this.state;
+    const {
+      web3,
+      account,
+      supplyContract,
+      metamaskAddress,
+      upc,
+      userContext,
+      txHistory,
+      loading
+    } = this.state;
     return (
       <div className="App">
         <header className="App-header">
@@ -127,34 +137,52 @@ class App extends React.Component {
           <p>Prove the authenticity of coffee using the Ethereum blockchain.</p>
         </header>
 
-        <section>
-          {userContext && <div onClick={this.goBack}>Go back</div>}
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <section>
+            {userContext && <div onClick={this.goBack}>Go back</div>}
 
-          <div className="Context-selector">
-            {!userContext && (
-              <>
-                <h2>Who are you?</h2>
-                <article onClick={() => this.setUserContext(CONTEXT.farmer)}>
-                  Farmer
-                </article>
-                <article
-                  onClick={() => this.setUserContext(CONTEXT.distributor)}
-                >
-                  Distributor
-                </article>
-                <article onClick={() => this.setUserContext(CONTEXT.retailer)}>
-                  Retailer
-                </article>
-                <article onClick={() => this.setUserContext(CONTEXT.consumer)}>
-                  Consumer
-                </article>
-              </>
-            )}
-          </div>
-        </section>
+            <div className="Context-selector">
+              {!userContext && (
+                <>
+                  <h2>Who are you?</h2>
+                  <article onClick={() => this.setUserContext(CONTEXT.farmer)}>
+                    Farmer
+                  </article>
+                  <article
+                    onClick={() => this.setUserContext(CONTEXT.distributor)}
+                  >
+                    Distributor
+                  </article>
+                  <article
+                    onClick={() => this.setUserContext(CONTEXT.retailer)}
+                  >
+                    Retailer
+                  </article>
+                  <article
+                    onClick={() => this.setUserContext(CONTEXT.consumer)}
+                  >
+                    Consumer
+                  </article>
+                </>
+              )}
+            </div>
+          </section>
+        )}
 
-        {userContext && <ContextSelector userContext={userContext} />}
-        {txHistory && <TxHistory txHistory={txHistory} />}
+        {userContext && (
+          <ContextSelector
+            web3={web3}
+            account={account}
+            supplyContract={supplyContract}
+            userContext={userContext}
+            txHistory={txHistory}
+            metamaskAddress={metamaskAddress}
+            upc={upc}
+          />
+        )}
+        {userContext && txHistory && <TxHistory txHistory={txHistory} />}
       </div>
     );
   }

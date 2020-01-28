@@ -1,58 +1,91 @@
 import React from "react";
+import { TextField, Button, Typography } from "@material-ui/core";
 
-const FarmDetails = () => {
+const FarmDetails = ({ txHistory, account }) => {
+  const createFarmer = () => {};
+  const handleChange = fieldId => {};
+  const handleAction = actionType => {};
+
   return (
     <>
-      <h2>Farm Details</h2>
-      <div className="form-group">
-        Farmer ID
-        <input
-          type="text"
-          id="originFarmerID"
-          name="originFarmerID"
-          value="0x99c289eb2aacec289631a5ddf62cf27a63d4494f"
-          size="50"
-        />
-        Farm Name
-        <input
-          type="text"
-          id="originFarmName"
-          name="originFarmName"
-          value="John Doe"
-        />
-        Farm Information
-        <input
-          type="text"
-          id="originFarmInformation"
-          name="originFarmInformation"
-          value="Yarra Valley"
-        />
-        Farm Latitude
-        <input
-          type="text"
-          id="originFarmLatitude"
-          name="originFarmLatitude"
-          value="-38.239770"
-        />
-        Farm Longitude
-        <input
-          type="text"
-          id="originFarmLongitude"
-          name="originFarmLongitude"
-          value="144.341490"
-        />
-        <button className="btn-harvest" id="button" type="button" data-id="1">
-          Harvest
-        </button>
-        <button className="btn-process" id="button" type="button" data-id="2">
-          Process
-        </button>
-        <button className="btn-pack" id="button" type="button" data-id="3">
-          Pack
-        </button>
-        <button className="btn-forsale" id="button" type="button" data-id="4">
-          ForSale
-        </button>
+      <Button variant="contained" color="primary" onClick={createFarmer}>
+        Create Farmer
+      </Button>
+
+      <Typography variant="h4">Farm Details</Typography>
+      <div className="FarmDetails-wrapper">
+        <div className="FarmDetails-Input">
+          <TextField label="Farmer ID" multiline rowsMax="1" value={account} />
+        </div>
+        <div className="FarmDetails-Input">
+          <TextField
+            label="Farm Name"
+            multiline
+            rowsMax="1"
+            value={txHistory.originFarmName}
+            onChange={() => handleChange("originFarmName")}
+          />
+        </div>
+        <div className="FarmDetails-Input">
+          <TextField
+            label="Farm Information"
+            multiline
+            rowsMax="1"
+            value={txHistory.originFarmInformation}
+            onChange={() => handleChange("originFarmInformation")}
+          />
+        </div>
+        <div className="FarmDetails-Input">
+          <TextField
+            label="Farm Latitude"
+            multiline
+            rowsMax="1"
+            placeholder="-38.239770"
+            value={txHistory.originFarmLatitude}
+            onChange={() => handleChange("originFarmLatitude")}
+          />
+        </div>
+        <div className="FarmDetails-Input">
+          <TextField
+            label="Farm Longitude"
+            multiline
+            rowsMax="1"
+            placeholder="144.341490"
+            value={txHistory.originFarmLongitude}
+            onChange={() => handleChange("originFarmLongitude")}
+          />
+        </div>
+
+        <div className="FarmDetails-Actions">
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => handleAction("harvest")}
+          >
+            Harvest
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => handleAction("process")}
+          >
+            Process
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => handleAction("pack")}
+          >
+            Pack
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => handleAction("forsale")}
+          >
+            ForSale
+          </Button>
+        </div>
       </div>
     </>
   );

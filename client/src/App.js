@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
-import Web3 from "web3";
+import React from "react";
+
 import TxHistory from "./TxHistory";
 import ContextSelector from "./ContextSelector";
-import { default as TruffleContract } from "@truffle/contract";
+// import { default as TruffleContract } from "@truffle/contract";
+
+import getWeb3 from "./getWeb3";
+
 import "./App.scss";
 
 export const CONTEXT = {
@@ -12,143 +15,149 @@ export const CONTEXT = {
   consumer: "CONSUMER"
 };
 
-function App() {
-  const [userContext, setUserContext] = useState("");
-  const [txHistory, setTxHistory] = useState("");
-  const [metamaskAccountID, setMetamaskAccountID] = useState("");
-  const [upc, setUpc] = useState("1");
-
-  const selectContext = context => {
-    setUserContext(context);
+class App extends React.Component {
+  state = {
+    web3: null,
+    account: null,
+    supplyContract: null,
+    userContext: "",
+    txHistory: "",
+    metamaskAddress: "",
+    upc: "1"
   };
 
-  const loadHistory = history => {
-    setTxHistory(history);
+  fetchItemBufferOne = async () => {
+    const { upc, supplyContract } = this.state;
+    if (!upc) return;
+
+    try {
+      const result = await supplyContract.methods
+        .fetchItemBufferOne(upc)
+        .call();
+      console.log(result);
+      this.setState({
+        txHistory: result
+      });
+    } catch (err) {
+      console.error("Error fetchItemBufferOne");
+    }
   };
 
-  const getMetamaskAccountId = web3 => {
-    web3.eth.getAccounts((err, res) => {
-      if (err) {
-        console.log("Error:", err);
-        return;
-      }
-      console.log("getMetaskID:", res);
-      setMetamaskAccountID(res[0]);
+  fetchItemBufferTwo = async () => {
+    const { upc, supplyContract } = this.state;
+    if (!upc) return;
+
+    try {
+      const result = await supplyContract.methods
+        .fetchItemBufferTwo(upc)
+        .call();
+      console.log(result);
+      this.setState({
+        txHistory: result
+      });
+    } catch (err) {
+      console.error("Error fetchItemBufferTwo");
+    }
+  };
+
+  goBack = () => {
+    this.setState({
+      userContext: ""
     });
   };
 
-  const fetchItemBufferOne = async supplyChain => {
-    // if (!upc) return;
-    console.log("upc", upc);
-
-    const supplyContract = await supplyChain.deployed();
-    supplyContract
-      .then(instance => {
-        return instance.fetchItemBufferOne(upc);
-      })
-      .then(result => {
-        setTxHistory(result);
-        console.log("fetchItemBufferOne", result);
-      })
-      .catch(function(err) {
-        console.log(err.message);
-      });
+  setUserContext = context => {
+    this.setState({
+      userContext: context
+    });
   };
 
-  const fetchItemBufferTwo = async supplyChain => {
-    if (!upc) return;
-    console.log("upc2", upc);
-
-    await supplyChain
-      .deployed()
-      .then(instance => {
-        return instance.fetchItemBufferTwo.call(upc);
-      })
-      .then(result => {
-        setTxHistory(result);
-        console.log("fetchItemBufferOne", result);
-      })
-      .catch(function(err) {
-        console.log(err.message);
-      });
-  };
-
-  const initSupplyChain = web3Provider => {
-    /// Source the truffle compiled smart contracts
-
+  startApp = async web3 => {
     try {
-      const SupplyChainABI = "/SupplyChain.json";
-
-      fetch(SupplyChainABI).then(async response => {
-        const SupplyChainArtifact = await response.json();
-        let supplyChain = TruffleContract(SupplyChainArtifact);
-        supplyChain.setProvider(web3Provider);
-        console.log("data", response);
-
-        await fetchItemBufferOne(supplyChain);
-        await fetchItemBufferTwo(supplyChain);
-        // App.fetchEvents();
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const initWeb3 = async () => {
-    try {
-      const web3Provider = new Web3(
-        Web3.givenProvider || "http://localhost:8545"
+      // Get contract instance
+      const networkId = await web3.eth.net.getId();
+      const SupplyChainContract = await fetch(
+        "/SupplyChain.json"
+      ).then(response => response.json());
+      const deployedNetwork = SupplyChainContract.networks[networkId];
+      const supplyContractInstance = new web3.eth.Contract(
+        SupplyChainContract.abi,
+        deployedNetwork.address
       );
-      getMetamaskAccountId(web3Provider);
 
-      return initSupplyChain(web3Provider);
+      // Get account address
+      const accounts = await web3.eth.getAccounts();
+      const account = accounts[0];
+
+      this.setState(
+        {
+          web3,
+          account,
+          supplyContract: supplyContractInstance
+        },
+        () => {
+          // Fetch item
+          this.fetchItemBufferOne();
+          this.fetchItemBufferTwo();
+        }
+      );
     } catch (err) {
+      console.error("Error starting app");
       console.error(err);
     }
   };
 
-  useEffect(() => {
-    initWeb3();
-  }, []); // eslint-disable-line
+  componentDidMount = async () => {
+    try {
+      const web3 = await getWeb3();
+      if (!web3) return;
+      this.startApp(web3);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>CoffeeCol</h1>
-        <h4>Fair Trade Coffee</h4>
-        <p>Prove the authenticity of coffee using the Ethereum blockchain.</p>
-      </header>
+  render() {
+    const { userContext, txHistory } = this.state;
+    return (
+      <div className="App">
+        <header className="App-header">
+          <h1>CoffeeCol</h1>
+          <h4>Fair Trade Coffee</h4>
+          <p>Prove the authenticity of coffee using the Ethereum blockchain.</p>
+        </header>
 
-      <section>
-        {userContext && <div onClick={() => selectContext("")}>Go back</div>}
+        <section>
+          {userContext && <div onClick={this.goBack}>Go back</div>}
 
-        <div className="Context-selector">
-          {!userContext && (
-            <>
-              <h2>Who are you?</h2>
-              <article onClick={() => selectContext(CONTEXT.farmer)}>
-                Farmer
-              </article>
-              <article onClick={() => selectContext(CONTEXT.distributor)}>
-                Distributor
-              </article>
-              <article onClick={() => selectContext(CONTEXT.retailer)}>
-                Retailer
-              </article>
-              <article onClick={() => selectContext(CONTEXT.consumer)}>
-                Consumer
-              </article>
-            </>
-          )}
-        </div>
-      </section>
+          <div className="Context-selector">
+            {!userContext && (
+              <>
+                <h2>Who are you?</h2>
+                <article onClick={() => this.setUserContext(CONTEXT.farmer)}>
+                  Farmer
+                </article>
+                <article
+                  onClick={() => this.setUserContext(CONTEXT.distributor)}
+                >
+                  Distributor
+                </article>
+                <article onClick={() => this.setUserContext(CONTEXT.retailer)}>
+                  Retailer
+                </article>
+                <article onClick={() => this.setUserContext(CONTEXT.consumer)}>
+                  Consumer
+                </article>
+              </>
+            )}
+          </div>
+        </section>
 
-      {userContext && (
-        <ContextSelector userContext={userContext} loadHistory={loadHistory} />
-      )}
-      {txHistory && <TxHistory txHistory={txHistory} />}
-    </div>
-  );
+        {userContext && <ContextSelector userContext={userContext} />}
+        {txHistory && <TxHistory txHistory={txHistory} />}
+      </div>
+    );
+  }
 }
 
 export default App;

@@ -22,7 +22,8 @@ const roleOptions = [
     id: CONTEXT.farmer,
     title: "Farmer",
     description: "Description",
-    image: require("./images/farmer.jpeg")
+    image: require("./images/farmer.jpeg"),
+    error: null
   },
   {
     id: CONTEXT.distributor,
@@ -102,6 +103,13 @@ class App extends React.Component {
     });
   };
 
+  setError = err => {
+    this.setState({
+      error: err,
+      loading: false
+    });
+  };
+
   startApp = async web3 => {
     try {
       // Get contract instance
@@ -117,12 +125,12 @@ class App extends React.Component {
 
       // Get account address
       const accounts = await web3.eth.getAccounts();
-      const account = accounts[0];
+      debugger;
 
       this.setState(
         {
           web3,
-          account,
+          accounts,
           supplyContract: supplyContractInstance,
           loading: false
         },
@@ -133,6 +141,7 @@ class App extends React.Component {
         }
       );
     } catch (err) {
+      this.setError(err);
       console.error("Error starting app");
       console.error(err);
     }
@@ -144,20 +153,22 @@ class App extends React.Component {
       if (!web3) return;
       this.startApp(web3);
     } catch (err) {
-      console.log(err);
+      this.setError(err);
+      console.log("Error mounting app");
     }
   };
 
   render() {
     const {
       web3,
-      account,
+      accounts,
       supplyContract,
       metamaskAddress,
       upc,
       userContext,
       txHistory,
-      loading
+      loading,
+      error
     } = this.state;
     return (
       <div className="App">
@@ -184,63 +195,101 @@ class App extends React.Component {
           </Typography>
         </header>
 
-        {loading ? (
-          <CircularProgress />
-        ) : (
-          <section className="colcoffee-main-wrapper">
+        {loading && <CircularProgress />}
+
+        {!loading && !error && (
+          <section
+            className={
+              userContext
+                ? "colcoffee-main-wrapper flatten"
+                : "colcoffee-main-wrapper"
+            }
+          >
             {userContext && (
               <div className="CoffeCol-goback" onClick={this.goBack}>
                 <ArrowBackIosIcon /> Go back
               </div>
             )}
 
-            <div className="Context-selector">
-              {!userContext && (
-                <>
-                  <Typography
-                    className="CoffeeCol-subtitle left"
-                    gutterBottom
-                    variant="h4"
-                    component="h4"
-                  >
-                    First, tell us who you are:
-                  </Typography>
-                  <br />
+            {!userContext && (
+              <div className="Context-selector">
+                <Typography
+                  className="CoffeeCol-subtitle left"
+                  gutterBottom
+                  variant="h4"
+                  component="h4"
+                >
+                  First, tell us who you are:
+                </Typography>
+                <br />
 
-                  <section className="Context-selection">
-                    {roleOptions.map((role, index) => (
-                      <CardOption
-                        key={index}
-                        selectOption={this.setUserContext}
-                        role={role}
-                      />
-                    ))}
-                  </section>
-                </>
-              )}
-            </div>
+                <section className="Context-selection">
+                  {roleOptions.map((role, index) => (
+                    <CardOption
+                      key={index}
+                      selectOption={this.setUserContext}
+                      role={role}
+                    />
+                  ))}
+                </section>
+              </div>
+            )}
           </section>
         )}
 
-        <section className="Core-Functionality-wrapper">
-          <div className="Roles-Functionality-wrapper">
-            {userContext && (
-              <ContextSelector
-                web3={web3}
-                account={account}
-                supplyContract={supplyContract}
-                userContext={userContext}
-                txHistory={txHistory}
-                metamaskAddress={metamaskAddress}
-                upc={upc}
-              />
-            )}
-          </div>
+        {error && (
+          <section className="Error-notice">
+            <Typography
+              className="Error-title"
+              gutterBottom
+              variant="h4"
+              component="h4"
+            >
+              Ops, something went wrong.
+            </Typography>
 
-          <div className="TXHistory-Functionality-wrapper">
-            {userContext && txHistory && <TxHistory txHistory={txHistory} />}
-          </div>
-        </section>
+            <Typography
+              className="Error-subtitle"
+              gutterBottom
+              variant="h4"
+              component="h4"
+            >
+              Please reload the page or change your account. If the problem
+              persist please write at andrescabsi@gmail.com
+            </Typography>
+            <br />
+            <div className="Error-wrapper">{JSON.stringify(error)}</div>
+          </section>
+        )}
+
+        {!error && (
+          <section
+            className={
+              userContext
+                ? "Core-Functionality-wrapper expanded"
+                : "Core-Functionality-wrapper"
+            }
+          >
+            <div className="Roles-Functionality-wrapper">
+              {userContext && !error && (
+                <ContextSelector
+                  web3={web3}
+                  accounts={accounts}
+                  supplyContract={supplyContract}
+                  userContext={userContext}
+                  txHistory={txHistory}
+                  metamaskAddress={metamaskAddress}
+                  upc={upc}
+                  setError={this.setError}
+                />
+              )}
+            </div>
+
+            <div className="TXHistory-Functionality-wrapper">
+              {userContext && txHistory && <TxHistory txHistory={txHistory} />}
+            </div>
+          </section>
+        )}
 
         <footer>
           <Typography

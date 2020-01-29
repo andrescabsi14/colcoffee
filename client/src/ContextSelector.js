@@ -13,12 +13,13 @@ import "./ContextSelector.scss";
 
 const ContextSelector = ({
   web3,
-  account,
+  accounts,
   supplyContract,
   userContext,
   txHistory,
   metamaskAddress,
-  upc
+  upc,
+  setError
 }) => {
   switch (userContext) {
     case CONTEXT.farmer: {
@@ -29,12 +30,13 @@ const ContextSelector = ({
           <div className="inner-content">
             <FarmDetails
               web3={web3}
-              account={account}
+              accounts={accounts}
               supplyContract={supplyContract}
               userContext={userContext}
               txHistory={txHistory}
               metamaskAddress={metamaskAddress}
               upc={upc}
+              setError={setError}
             />
             <ProductOverview />
           </div>
@@ -49,12 +51,13 @@ const ContextSelector = ({
           <div className="inner-content">
             <DistributorDetails
               web3={web3}
-              account={account}
+              accounts={accounts}
               supplyContract={supplyContract}
               userContext={userContext}
               txHistory={txHistory}
               metamaskAddress={metamaskAddress}
               upc={upc}
+              setError={setError}
             />
             <ProductOverview />
           </div>
@@ -69,12 +72,13 @@ const ContextSelector = ({
           <div className="inner-content">
             <RetailerDetails
               web3={web3}
-              account={account}
+              accounts={accounts}
               supplyContract={supplyContract}
               userContext={userContext}
               txHistory={txHistory}
               metamaskAddress={metamaskAddress}
               upc={upc}
+              setError={setError}
             />
             <ProductOverview />
           </div>
@@ -89,12 +93,13 @@ const ContextSelector = ({
           <div className="inner-content">
             <ConsumerDetails
               web3={web3}
-              account={account}
+              accounts={accounts}
               supplyContract={supplyContract}
               userContext={userContext}
               txHistory={txHistory}
               metamaskAddress={metamaskAddress}
               upc={upc}
+              setError={setError}
             />
             <ProductOverview />
           </div>

@@ -5,20 +5,38 @@ import "./FarmDetails.scss";
 
 class FarmDetails extends React.Component {
   state = {
-    farmerId: null
+    farmerId: null,
+    inputFarmerId: ""
   };
 
-  createFarmer = () => {
-    this.setState({
-      farmerId: 123
-    });
+  createFarmer = async () => {
+    const { supplyContract, setError } = this.props;
+    const { inputFarmerId } = this.state;
+    try {
+      const newFarmerId = await supplyContract.methods
+        .addFarmer(inputFarmerId)
+        .send({ from: inputFarmerId });
+
+      this.setState({
+        farmerId: newFarmerId
+      });
+    } catch (err) {
+      setError(err);
+      console.log("Error mounting app");
+    }
   };
   handleChange = fieldId => {};
   handleAction = actionType => {};
 
+  componentDidMount() {
+    this.setState({
+      inputFarmerId: this.props.accounts[0] || null
+    });
+  }
+
   render() {
-    const { txHistory, account } = this.props;
-    const { farmerId } = this.state;
+    const { txHistory, accounts } = this.props;
+    const { farmerId, inputFarmerId } = this.state;
     return (
       <section
         className={
@@ -32,13 +50,18 @@ class FarmDetails extends React.Component {
             your current address.
           </Typography>
           <br />
+          <Typography variant="h6">Detected account addresses:</Typography>
+          {!!accounts.length &&
+            accounts.map((account, index) => <div key={index}>{account}</div>)}
+
+          <br />
           <div className="FarmDetail-formWrapper">
             <div className="FarmDetail-Input">
               <TextField
                 label="Farmer ID"
                 multiline
                 rowsMax="1"
-                value={account}
+                value={inputFarmerId}
               />
             </div>
             <Button
@@ -60,7 +83,7 @@ class FarmDetails extends React.Component {
                   label="Farmer ID"
                   multiline
                   rowsMax="1"
-                  value={account}
+                  value={farmerId}
                   disabled
                 />
               </div>

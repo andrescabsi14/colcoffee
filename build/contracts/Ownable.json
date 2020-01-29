@@ -76,7 +76,6 @@
       "type": "function"
     }
   ],
-  "metadata": "",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
@@ -2897,28 +2896,9 @@
   },
   "compiler": {
     "name": "solc",
-    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+    "version": "0.4.25+commit.59dbf8f1.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.22",
-  "updatedAt": "2020-01-27T18:32:49.481Z",
-  "devdoc": {
-    "methods": {}
-  },
-  "userdoc": {
-    "methods": {
-      "isOwner()": {
-        "notice": "Check if the calling address is the owner of the contract"
-      },
-      "owner()": {
-        "notice": "Look up the address of the owner"
-      },
-      "renounceOwnership()": {
-        "notice": "Define a function to renounce ownerhip"
-      },
-      "transferOwnership(address)": {
-        "notice": "Define a public function to transfer ownership"
-      }
-    }
-  }
+  "schemaVersion": "2.0.2",
+  "updatedAt": "2020-01-29T15:43:45.657Z"
 }

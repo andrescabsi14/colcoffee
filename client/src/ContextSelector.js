@@ -19,7 +19,8 @@ const ContextSelector = ({
   txHistory,
   metamaskAddress,
   upc,
-  setError
+  setError,
+  setNotification
 }) => {
   switch (userContext) {
     case CONTEXT.farmer: {
@@ -37,8 +38,9 @@ const ContextSelector = ({
               metamaskAddress={metamaskAddress}
               upc={upc}
               setError={setError}
+              setNotification={setNotification}
             />
-            <ProductOverview />
+            <ProductOverview setError={setError} />
           </div>
         </>
       );
@@ -58,8 +60,9 @@ const ContextSelector = ({
               metamaskAddress={metamaskAddress}
               upc={upc}
               setError={setError}
+              setNotification={setNotification}
             />
-            <ProductOverview />
+            <ProductOverview setError={setError} />
           </div>
         </>
       );
@@ -79,8 +82,9 @@ const ContextSelector = ({
               metamaskAddress={metamaskAddress}
               upc={upc}
               setError={setError}
+              setNotification={setNotification}
             />
-            <ProductOverview />
+            <ProductOverview setError={setError} />
           </div>
         </>
       );
@@ -100,8 +104,12 @@ const ContextSelector = ({
               metamaskAddress={metamaskAddress}
               upc={upc}
               setError={setError}
+              setNotification={setNotification}
             />
-            <ProductOverview />
+            <ProductOverview
+              setError={setError}
+              setNotification={setNotification}
+            />
           </div>
         </>
       );

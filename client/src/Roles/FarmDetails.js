@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField, Button, Typography } from "@material-ui/core";
+import { TextField, Button, Typography, Snackbar } from "@material-ui/core";
 
 import "./FarmDetails.scss";
 
@@ -10,16 +10,24 @@ class FarmDetails extends React.Component {
   };
 
   createFarmer = async () => {
-    const { supplyContract, setError } = this.props;
-    const { inputFarmerId } = this.state;
+    const { supplyContract, setError, setNotification } = this.props;
+    const { inputFarmerId, farmerId } = this.state;
     try {
-      const newFarmerId = await supplyContract.methods
-        .addFarmer(inputFarmerId)
-        .send({ from: inputFarmerId });
+      if (farmerId) {
+        setNotification(`You are a registered farmer already.`);
+        this.setState({
+          farmerId: inputFarmerId
+        });
+      } else {
+        const newFarmerId = await supplyContract.methods
+          .addFarmer(inputFarmerId)
+          .send({ from: inputFarmerId });
 
-      this.setState({
-        farmerId: newFarmerId
-      });
+        setNotification(`Farmer id created for ${inputFarmerId}`);
+        this.setState({
+          farmerId: newFarmerId
+        });
+      }
     } catch (err) {
       setError(err);
       console.log("Error mounting app");
@@ -28,10 +36,27 @@ class FarmDetails extends React.Component {
   handleChange = fieldId => {};
   handleAction = actionType => {};
 
-  componentDidMount() {
+  isFarmer = async () => {
+    const { supplyContract } = this.props;
+    const { inputFarmerId } = this.state;
+    const isFarmer = await supplyContract.methods
+      .isFarmer(inputFarmerId)
+      .call();
+
     this.setState({
-      inputFarmerId: this.props.accounts[0] || null
+      farmerId: isFarmer ? inputFarmerId : null
     });
+  };
+
+  async componentDidMount() {
+    this.setState(
+      {
+        inputFarmerId: this.props.accounts[0] || null
+      },
+      async () => {
+        await this.isFarmer();
+      }
+    );
   }
 
   render() {
@@ -44,34 +69,47 @@ class FarmDetails extends React.Component {
         }
       >
         <div className="FarmDetail-newfarmer">
-          <Typography variant="h4">Create Farmer user</Typography>
-          <Typography variant="body1">
-            Before interacting with the system, we need you to register with
-            your current address.
-          </Typography>
-          <br />
-          <Typography variant="h6">Detected account addresses:</Typography>
-          {!!accounts.length &&
-            accounts.map((account, index) => <div key={index}>{account}</div>)}
+          {!farmerId ? (
+            <>
+              <Typography variant="h4">Create Farmer user</Typography>
+              <Typography variant="body1">
+                Before interacting with the system, we need you to register with
+                your current address.
+              </Typography>
+              <br />
+              <Typography variant="h6">Detected account addresses:</Typography>
+              {!!accounts.length &&
+                accounts.map((account, index) => (
+                  <div key={index}>{account}</div>
+                ))}
 
-          <br />
-          <div className="FarmDetail-formWrapper">
-            <div className="FarmDetail-Input">
-              <TextField
-                label="Farmer ID"
-                multiline
-                rowsMax="1"
-                value={inputFarmerId}
-              />
-            </div>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={this.createFarmer}
-            >
-              Create Farmer
-            </Button>
-          </div>
+              <br />
+
+              <div className="FarmDetail-formWrapper">
+                <div className="FarmDetail-Input">
+                  <TextField
+                    label="Farmer ID"
+                    multiline
+                    rowsMax="1"
+                    value={inputFarmerId}
+                    disabled
+                  />
+                </div>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={this.createFarmer}
+                >
+                  Create Farmer
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Typography variant="h4">Farmer Address</Typography>
+              <Typography variant="body1">{farmerId}</Typography>
+            </>
+          )}
         </div>
 
         {farmerId && (

@@ -3,61 +3,103 @@ import { TextField, Button, Typography } from "@material-ui/core";
 
 import "./ProductOverview.scss";
 
-const ProductOverview = () => {
-  const handleChange = actionType => {};
-  const handleAction = actionType => {};
-  return (
-    <section className="ProductOverview-wrapper">
-      <Typography variant="h4">Product Overview</Typography>
-      <div className="ProductOverview-formWrapper">
-        <div className="ProductOverview-Input">
-          <TextField
-            label="SKU"
-            multiline
-            rowsMax="1"
-            onChange={() => handleChange("SKU")}
-          />
-        </div>
-        <div className="ProductOverview-Input">
-          <TextField
-            label="UPC"
-            multiline
-            rowsMax="1"
-            onChange={() => handleChange("UPC")}
-          />
-        </div>
-        <div className="ProductOverview-Input">
-          <TextField
-            label="Current Owner ID"
-            multiline
-            rowsMax="1"
-            placeholder={"0x963865f57804b38459dd4b2da2f760211a200438"}
-            onChange={() => handleChange("UPC")}
-          />
-        </div>
+class ProductOverview extends React.Component {
+  state = {
+    upc: "",
+    searchResult: null,
+    error: null
+  };
 
-        <div className="ProductOverviews-Actions">
-          <Button
-            variant="contained"
-            color="secondary"
-            data-id="9"
-            onClick={() => handleAction("fetchData1")}
-          >
-            Fetch Data 1
-          </Button>
+  fetchData = async buffer => {
+    const { supplyContract, setError } = this.props;
+    const { accounts, upc } = this.state;
 
-          <Button
-            variant="contained"
-            color="secondary"
-            data-id="10"
-            onClick={() => handleAction("fetchData2")}
-          >
-            Fetch Data 2
-          </Button>
+    if (!upc) {
+      this.setState({
+        error: "Please set a valid UPC"
+      });
+      return;
+    }
+
+    let fetchedItems;
+
+    try {
+      if (buffer === 2) {
+        fetchedItems = await supplyContract.methods
+          .fetchItemBufferTwo(upc)
+          .send({ from: accounts[0] });
+      } else {
+        fetchedItems = await supplyContract.methods
+          .fetchItemBufferOne(upc)
+          .send({ from: accounts[0] });
+      }
+
+      this.setState({
+        fetchedItems,
+        error: null
+      });
+    } catch (err) {
+      this.setState({ error: err });
+      console.log("Error in product overview");
+    }
+  };
+
+  changeUPC = value => {
+    this.setState({
+      upc: value
+    });
+  };
+
+  render() {
+    const { searchResult, upc, error } = this.state;
+    return (
+      <section className="ProductOverview-wrapper">
+        <Typography variant="h4">Product Overview</Typography>
+        <div className="ProductOverview-formWrapper">
+          <div className="ProductOverview-Input">
+            <TextField
+              label="UPC"
+              multiline
+              rowsMax="1"
+              value={upc}
+              onChange={e => this.changeUPC(e.target.value)}
+            />
+          </div>
+
+          <div className="ProductOverviews-Actions">
+            <Button
+              variant="contained"
+              color="secondary"
+              data-id="9"
+              onClick={() => this.fetchData(1)}
+            >
+              Fetch Data 1
+            </Button>
+
+            <Button
+              variant="contained"
+              color="secondary"
+              data-id="10"
+              onClick={() => this.fetchData(2)}
+            >
+              Fetch Data 2
+            </Button>
+          </div>
+
+          {error && (
+            <div className="ProductOverview-error">
+              Error: {JSON.stringify(error)}
+            </div>
+          )}
+          {searchResult && (
+            <div className="ProductOverview-searchResult">
+              {JSON.stringify(searchResult)}
+            </div>
+          )}
         </div>
-      </div>
-    </section>
-  );
-};
+      </section>
+    );
+  }
+}
 
 export default ProductOverview;

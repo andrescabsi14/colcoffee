@@ -1,5 +1,6 @@
 import React from "react";
-import { CircularProgress, Typography } from "@material-ui/core";
+import { CircularProgress, Typography, Snackbar } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 // import DeleteRoundedIcon from "@material-ui/icons/DeleteRounded";
 import TxHistory from "./TxHistory";
@@ -45,6 +46,10 @@ const roleOptions = [
   }
 ];
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 class App extends React.Component {
   state = {
     web3: null,
@@ -54,7 +59,8 @@ class App extends React.Component {
     txHistory: "",
     metamaskAddress: "",
     upc: "1",
-    loading: true
+    loading: true,
+    notification: false
   };
 
   fetchItemBufferOne = async () => {
@@ -110,6 +116,17 @@ class App extends React.Component {
     });
   };
 
+  closeNotification = () => {
+    this.setState({
+      notification: false
+    });
+  };
+  setNotification = message => {
+    this.setState({
+      notification: message
+    });
+  };
+
   startApp = async web3 => {
     try {
       // Get contract instance
@@ -125,7 +142,6 @@ class App extends React.Component {
 
       // Get account address
       const accounts = await web3.eth.getAccounts();
-      debugger;
 
       this.setState(
         {
@@ -168,7 +184,8 @@ class App extends React.Component {
       userContext,
       txHistory,
       loading,
-      error
+      error,
+      notification
     } = this.state;
     return (
       <div className="App">
@@ -281,6 +298,7 @@ class App extends React.Component {
                   metamaskAddress={metamaskAddress}
                   upc={upc}
                   setError={this.setError}
+                  setNotification={this.setNotification}
                 />
               )}
             </div>
@@ -290,6 +308,16 @@ class App extends React.Component {
             </div>
           </section>
         )}
+
+        <Snackbar
+          open={!!notification}
+          autoHideDuration={6000}
+          onClose={this.closeNotification}
+        >
+          <Alert onClose={this.closeNotification} severity="success">
+            {notification}
+          </Alert>
+        </Snackbar>
 
         <footer>
           <Typography

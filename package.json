@@ -5,6 +5,7 @@
   "main": "truffle.js",
   "scripts": {
     "start": "lite-server",
+    "installAll": "npm i && cd client && npm i",
     "contracts:compile": "truffle compile",
     "contracts:migrate": "truffle migrate",
     "contracts:deploy": "truffle migrate --reset --network rinkeby",
@@ -18,7 +19,7 @@
     "dotenv": "^8.2.0",
     "truffle": "^4.1.16",
     "truffle-hdwallet-provider": "^1.0.17",
-    "web3": "^1.2.5"
+    "web3": "^1.0.0-beta.37"
   },
   "devDependencies": {
     "lite-server": "2.4.0"

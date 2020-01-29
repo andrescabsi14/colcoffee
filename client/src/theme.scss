@@ -4,3 +4,16 @@ $backgroundSecond: #180e06;
 $accentColor: #e9d8a0;
 $secondaryAccent: #fdcd2f;
 $accentFont: darken($accentColor, 60%);
+
+$formColor: darken($accentColor, 60%);
+$formBgColor: #ffffff;
+
+$sectionPadding: 20px 30px;
+
+$buttonBg: $secondaryAccent;
+$buttonFont: $accentFont;
+$buttonBorder: transparent;
+
+$buttonBgHover: #2e1c13;
+$buttonFontHover: #ffffff;
+$buttonBorderHover: #192533;

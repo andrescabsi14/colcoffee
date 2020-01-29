@@ -1,0 +1,55 @@
+@import "./theme.scss";
+
+.FarmDetail {
+  &-wrapper {
+    display: flex;
+    width: 100%;
+    // flex-direction: column;
+  }
+
+  &-farmDetails {
+    display: flex;
+    flex-direction: column;
+    background: $formBgColor;
+    border: solid 1px $formColor;
+    color: $accentFont;
+    padding: $sectionPadding;
+  }
+
+  &-newfarmer {
+    display: flex;
+    flex-direction: column;
+    background: $formBgColor;
+    border: solid 1px $formColor;
+    color: $accentFont;
+    padding: $sectionPadding;
+    width: 450px;
+    margin: 0 30px 30px 0;
+  }
+
+  &-formWrapper {
+    display: flex;
+    flex-direction: column;
+    color: $formColor;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    &.inline {
+      flex-direction: row;
+    }
+
+    label,
+    input,
+    textarea {
+      color: $formColor;
+    }
+
+    .FarmDetails-Input {
+      margin-bottom: 10px;
+    }
+  }
+
+  &-Input {
+    margin-bottom: 10px;
+  }
+}

@@ -1,5 +1,7 @@
 import React from "react";
 import { CircularProgress, Typography } from "@material-ui/core";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+// import DeleteRoundedIcon from "@material-ui/icons/DeleteRounded";
 import TxHistory from "./TxHistory";
 import ContextSelector from "./ContextSelector";
 import CardOption from "./components/CardOption";
@@ -186,28 +188,35 @@ class App extends React.Component {
           <CircularProgress />
         ) : (
           <section className="colcoffee-main-wrapper">
-            {userContext && <div onClick={this.goBack}>Go back</div>}
+            {userContext && (
+              <div className="CoffeCol-goback" onClick={this.goBack}>
+                <ArrowBackIosIcon /> Go back
+              </div>
+            )}
 
             <div className="Context-selector">
-              <Typography
-                className="CoffeeCol-subtitle left"
-                gutterBottom
-                variant="h4"
-                component="h4"
-              >
-                First, tell us who you are:
-              </Typography>
-              <br />
               {!userContext && (
-                <section className="Context-selection">
-                  {roleOptions.map((role, index) => (
-                    <CardOption
-                      key={index}
-                      selectOption={this.setUserContext}
-                      role={role}
-                    />
-                  ))}
-                </section>
+                <>
+                  <Typography
+                    className="CoffeeCol-subtitle left"
+                    gutterBottom
+                    variant="h4"
+                    component="h4"
+                  >
+                    First, tell us who you are:
+                  </Typography>
+                  <br />
+
+                  <section className="Context-selection">
+                    {roleOptions.map((role, index) => (
+                      <CardOption
+                        key={index}
+                        selectOption={this.setUserContext}
+                        role={role}
+                      />
+                    ))}
+                  </section>
+                </>
               )}
             </div>
           </section>
@@ -233,6 +242,14 @@ class App extends React.Component {
             component="p"
           >
             Prove the authenticity of coffee using the Ethereum blockchain.
+          </Typography>
+          <Typography
+            className="CoffeeCol-moto"
+            gutterBottom
+            variant="body1"
+            component="p"
+          >
+            Andres Cabrera @2019 All rights reserved.
           </Typography>
         </footer>
       </div>

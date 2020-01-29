@@ -28,7 +28,7 @@ body {
       //   rgba(31, 51, 67, 1) 0%,
       //   rgba(23, 33, 46, 1) 100%
       // );
-      padding: 40px;
+      padding: 40px 40px 20px 40px;
       box-sizing: border-box;
 
       header.App-header {
@@ -140,10 +140,11 @@ body {
       }
       footer {
         text-align: center;
-        font-size: 12px;
+        font-size: 13px;
 
         p {
           font-size: inherit;
+          margin-bottom: 0;
         }
       }
     }
@@ -173,5 +174,32 @@ body {
       background: #f4c493;
       color: #192533;
     }
+  }
+}
+
+.CoffeCol-goback {
+  font-size: 16px;
+  width: 100px;
+  color: white;
+  text-shadow: 0px 0px 2px white;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: absolute;
+  top: 25px;
+  left: 40px;
+}
+button.MuiButton-containedSecondary {
+  background: $buttonBg;
+  color: $buttonFont;
+  display: inline-flex;
+  margin: 0 10px 10px 0;
+  box-shadow: none;
+  border: solid 1px $buttonBorder;
+
+  &:hover {
+    background: $buttonBgHover;
+    color: $buttonFontHover;
+    border: solid 1px $buttonBorderHover;
   }
 }

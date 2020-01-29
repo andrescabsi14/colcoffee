@@ -7,6 +7,8 @@ import ProductOverview from "./ProductOverview";
 import FarmDetails from "./FarmDetails";
 import ProductDetails from "./ProductDetails";
 
+import "./ContextSelector.scss";
+
 const ContextSelector = ({
   web3,
   account,

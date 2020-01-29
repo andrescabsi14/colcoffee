@@ -1,0 +1,177 @@
+@import url("https://fonts.googleapis.com/css?family=Assistant:200,400,700&display=swap");
+@import "./theme.scss";
+
+body {
+  font-family: "Assistant", sans-serif;
+  // background: rgb(19, 44, 51);
+  // background: radial-gradient(circle, #132c33 0%, #121b26);
+  background: radial-gradient(circle, $backgroundFirst 0%, $backgroundSecond);
+  color: #ffffff;
+  height: 100%;
+  min-height: 100vh;
+
+  // padding: 30px;
+
+  > div#root {
+    height: 100%;
+    min-height: 100vh;
+
+    > div.App {
+      height: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+
+      // background: rgb(31, 51, 67);
+      // background: linear-gradient(
+      //   90deg,
+      //   rgba(31, 51, 67, 1) 0%,
+      //   rgba(23, 33, 46, 1) 100%
+      // );
+      padding: 40px;
+      box-sizing: border-box;
+
+      header.App-header {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        margin: 0 auto;
+
+        .CoffeeCol-title {
+          text-align: right;
+          margin-bottom: 5px;
+          font-size: 44px;
+          line-height: 36px;
+          font-size: 59px;
+          line-height: 46px;
+          text-align: center;
+          font-weight: 500;
+          color: #ffffff;
+          text-shadow: 0px 0px 2px #ffffff;
+        }
+
+        .CoffeeCol-bar {
+          width: 240px;
+          height: 5px;
+          background: #ffffff;
+          display: flex;
+          margin-bottom: 4px;
+          box-shadow: 0px 0px 43px -1px #ffffff;
+          z-index: 1;
+          margin: 0 auto 5px auto;
+          position: relative;
+
+          span {
+            &:first-child {
+              background: $secondaryAccent;
+              flex: 1;
+              height: 100%;
+              display: block;
+            }
+            &:last-child {
+              background: $accentColor;
+              flex: 1;
+              height: 100%;
+              display: block;
+            }
+          }
+        }
+        .CoffeeCol-subtitle {
+          margin-bottom: 0;
+          color: $accentColor;
+          font-size: 14px;
+          letter-spacing: 7px;
+          margin-right: -10px;
+          text-align: center;
+          text-transform: uppercase;
+          text-shadow: 0px 0px 2px $accentColor;
+          position: relative;
+
+          &.left {
+            text-align: left;
+          }
+        }
+
+        .CoffeeCol-moto {
+          text-align: right;
+        }
+      }
+
+      .colcoffee-main-wrapper {
+        flex: 1;
+        display: flex;
+        align-items: center;
+
+        .Context-selector {
+          display: flex;
+          width: 100%;
+          flex-wrap: wrap;
+
+          > .CoffeeCol-subtitle {
+            font-size: 20px;
+            margin-bottom: 40px;
+          }
+
+          .Context-selection {
+            width: 100%;
+            display: flex;
+
+            .CardOption-wrapper {
+              flex: 1;
+              margin: 0 20px 20px 0;
+              border: solid 1px #ffffff;
+              max-width: none;
+
+              &:last-child {
+                margin-right: 0;
+              }
+
+              .Card-image {
+                height: 300px;
+
+                img {
+                  height: 100%;
+                  width: auto;
+                }
+              }
+            }
+          }
+        }
+      }
+      footer {
+        text-align: center;
+        font-size: 12px;
+
+        p {
+          font-size: inherit;
+        }
+      }
+    }
+  }
+
+  h1 {
+    font-family: "Assistant", sans-serif;
+    color: rgb(104, 168, 214);
+
+    .accent {
+      color: #ffc107;
+    }
+  }
+
+  .cc-button {
+    border: solid 2px #f4c493;
+    border-radius: 0;
+    background: #192533;
+    color: #ffffff;
+    padding: 10px 30px;
+    width: 100%;
+
+    font-weight: 400;
+    font-size: 14px;
+
+    &:hover {
+      background: #f4c493;
+      color: #192533;
+    }
+  }
+}

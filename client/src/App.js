@@ -1,7 +1,8 @@
 import React from "react";
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress, Typography } from "@material-ui/core";
 import TxHistory from "./TxHistory";
 import ContextSelector from "./ContextSelector";
+import CardOption from "./components/CardOption";
 
 import getWeb3 from "./getWeb3";
 
@@ -13,6 +14,33 @@ export const CONTEXT = {
   retailer: "RETAILER",
   consumer: "CONSUMER"
 };
+
+const roleOptions = [
+  {
+    id: CONTEXT.farmer,
+    title: "Farmer",
+    description: "Description",
+    image: require("./images/farmer.jpeg")
+  },
+  {
+    id: CONTEXT.distributor,
+    title: "Distributor",
+    description: "Description",
+    image: require("./images/coperativaCafe.png")
+  },
+  {
+    id: CONTEXT.retailer,
+    title: "Retailer",
+    description: "Description",
+    image: require("./images/retailer-cafe.jpeg")
+  },
+  {
+    id: CONTEXT.consumer,
+    title: "Consumer",
+    description: "Description",
+    images: require("./images/cupCofffe.jpg")
+  }
+];
 
 class App extends React.Component {
   state = {
@@ -132,40 +160,54 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1>CoffeeCol</h1>
-          <h4>Fair Trade Coffee</h4>
-          <p>Prove the authenticity of coffee using the Ethereum blockchain.</p>
+          <Typography
+            className="CoffeeCol-title"
+            gutterBottom
+            variant="h1"
+            component="h1"
+          >
+            CoffeeCol
+          </Typography>
+          <div className="CoffeeCol-bar">
+            <span></span>
+            <span></span>
+          </div>
+          <Typography
+            className="CoffeeCol-subtitle"
+            gutterBottom
+            variant="h4"
+            component="h4"
+          >
+            Fair Trade Coffee
+          </Typography>
         </header>
 
         {loading ? (
           <CircularProgress />
         ) : (
-          <section>
+          <section className="colcoffee-main-wrapper">
             {userContext && <div onClick={this.goBack}>Go back</div>}
 
             <div className="Context-selector">
+              <Typography
+                className="CoffeeCol-subtitle left"
+                gutterBottom
+                variant="h4"
+                component="h4"
+              >
+                First, tell us who you are:
+              </Typography>
+              <br />
               {!userContext && (
-                <>
-                  <h2>Who are you?</h2>
-                  <article onClick={() => this.setUserContext(CONTEXT.farmer)}>
-                    Farmer
-                  </article>
-                  <article
-                    onClick={() => this.setUserContext(CONTEXT.distributor)}
-                  >
-                    Distributor
-                  </article>
-                  <article
-                    onClick={() => this.setUserContext(CONTEXT.retailer)}
-                  >
-                    Retailer
-                  </article>
-                  <article
-                    onClick={() => this.setUserContext(CONTEXT.consumer)}
-                  >
-                    Consumer
-                  </article>
-                </>
+                <section className="Context-selection">
+                  {roleOptions.map((role, index) => (
+                    <CardOption
+                      key={index}
+                      selectOption={this.setUserContext}
+                      role={role}
+                    />
+                  ))}
+                </section>
               )}
             </div>
           </section>
@@ -183,6 +225,16 @@ class App extends React.Component {
           />
         )}
         {userContext && txHistory && <TxHistory txHistory={txHistory} />}
+        <footer>
+          <Typography
+            className="CoffeeCol-moto"
+            gutterBottom
+            variant="body1"
+            component="p"
+          >
+            Prove the authenticity of coffee using the Ethereum blockchain.
+          </Typography>
+        </footer>
       </div>
     );
   }

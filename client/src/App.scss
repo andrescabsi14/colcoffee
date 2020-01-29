@@ -109,7 +109,8 @@ body {
 
           > .CoffeeCol-subtitle {
             font-size: 20px;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
+            margin-top: 40px;
           }
 
           .Context-selection {
@@ -201,5 +202,26 @@ button.MuiButton-containedSecondary {
     background: $buttonBgHover;
     color: $buttonFontHover;
     border: solid 1px $buttonBorderHover;
+  }
+}
+
+section.Core-Functionality-wrapper {
+  display: flex;
+  padding-top: 30px;
+
+  .inner-content {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .Roles-Functionality-wrapper {
+    margin-right: 30px;
+    flex: 1;
+  }
+  .TXHistory-Functionality-wrapper {
+    padding-top: 74px;
+    height: 100%;
+    width: 512px;
+    overflow: hidden;
   }
 }

@@ -4,8 +4,10 @@ import { Typography } from "@material-ui/core";
 import { CONTEXT } from "./App";
 
 import ProductOverview from "./ProductOverview";
-import FarmDetails from "./FarmDetails";
-import ProductDetails from "./ProductDetails";
+import FarmDetails from "./Roles/FarmDetails";
+import DistributorDetails from "./Roles/DistributorDetails";
+import RetailerDetails from "./Roles/RetailerDetails";
+import ConsumerDetails from "./Roles/ConsumerDetails";
 
 import "./ContextSelector.scss";
 
@@ -23,42 +25,79 @@ const ContextSelector = ({
       return (
         <>
           <Typography variant="h3">Farmer</Typography>
-          <FarmDetails
-            web3={web3}
-            account={account}
-            supplyContract={supplyContract}
-            userContext={userContext}
-            txHistory={txHistory}
-            metamaskAddress={metamaskAddress}
-            upc={upc}
-          />
-          <ProductOverview />
+          <br />
+          <div className="inner-content">
+            <FarmDetails
+              web3={web3}
+              account={account}
+              supplyContract={supplyContract}
+              userContext={userContext}
+              txHistory={txHistory}
+              metamaskAddress={metamaskAddress}
+              upc={upc}
+            />
+            <ProductOverview />
+          </div>
         </>
       );
     }
     case CONTEXT.distributor: {
       return (
         <>
-          <h2>distributor</h2>
-          <ProductDetails />
-          <ProductOverview />
+          <Typography variant="h3">Distributor</Typography>
+          <br />
+          <div className="inner-content">
+            <DistributorDetails
+              web3={web3}
+              account={account}
+              supplyContract={supplyContract}
+              userContext={userContext}
+              txHistory={txHistory}
+              metamaskAddress={metamaskAddress}
+              upc={upc}
+            />
+            <ProductOverview />
+          </div>
         </>
       );
     }
     case CONTEXT.retailer: {
       return (
         <>
-          <h2>retailer</h2>
-          <ProductDetails />
-          <ProductOverview />
+          <Typography variant="h3">Retailer</Typography>
+          <br />
+          <div className="inner-content">
+            <RetailerDetails
+              web3={web3}
+              account={account}
+              supplyContract={supplyContract}
+              userContext={userContext}
+              txHistory={txHistory}
+              metamaskAddress={metamaskAddress}
+              upc={upc}
+            />
+            <ProductOverview />
+          </div>
         </>
       );
     }
     case CONTEXT.consumer: {
       return (
         <>
-          <h2>Consumer</h2>
-          <ProductOverview />
+          <Typography variant="h3">Consumer</Typography>
+          <br />
+          <div className="inner-content">
+            <ConsumerDetails
+              web3={web3}
+              account={account}
+              supplyContract={supplyContract}
+              userContext={userContext}
+              txHistory={txHistory}
+              metamaskAddress={metamaskAddress}
+              upc={upc}
+            />
+            <ProductOverview />
+          </div>
         </>
       );
     }

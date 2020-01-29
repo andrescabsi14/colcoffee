@@ -1,33 +1,35 @@
-@import "./theme.scss";
+@import "../theme.scss";
 
-.TxHistory {
+.FarmDetail {
   &-wrapper {
+    display: flex;
     width: 100%;
-    min-height: 310px;
+    margin-bottom: 30px;
+    flex: $gridWidthEl;
+
+    &.extended {
+      flex: 1 0 100%;
+    }
+  }
+
+  &-farmDetails {
     display: flex;
     flex-direction: column;
     background: $formBgColor;
     border: solid 1px $formColor;
     color: $accentFont;
-    margin: 0 30px 30px 0;
     padding: $sectionPadding;
-    flex: 1;
   }
 
-  &-Input {
-    margin-bottom: 10px;
+  &-newfarmer {
     display: flex;
-    font-size: 14px;
-
-    .label {
-      font-weight: 800;
-      margin-right: 5px;
-      font-size: 16px;
-    }
-
-    .value {
-      font-size: 16px;
-    }
+    flex-direction: column;
+    background: $formBgColor;
+    border: solid 1px $formColor;
+    color: $accentFont;
+    padding: $sectionPadding;
+    flex: 1;
+    margin: 0 30px 0px 0;
   }
 
   &-formWrapper {
@@ -48,9 +50,11 @@
     }
 
     .FarmDetails-Input {
-      margin-bottom: 7px;
-      display: flex;
-      width: 100%;
+      margin-bottom: 10px;
     }
+  }
+
+  &-Input {
+    margin-bottom: 10px;
   }
 }

@@ -40,7 +40,7 @@ const roleOptions = [
     id: CONTEXT.consumer,
     title: "Consumer",
     description: "Description",
-    images: require("./images/cupCofffe.jpg")
+    image: require("./images/cupCofffe.jpg")
   }
 ];
 
@@ -222,18 +222,26 @@ class App extends React.Component {
           </section>
         )}
 
-        {userContext && (
-          <ContextSelector
-            web3={web3}
-            account={account}
-            supplyContract={supplyContract}
-            userContext={userContext}
-            txHistory={txHistory}
-            metamaskAddress={metamaskAddress}
-            upc={upc}
-          />
-        )}
-        {userContext && txHistory && <TxHistory txHistory={txHistory} />}
+        <section className="Core-Functionality-wrapper">
+          <div className="Roles-Functionality-wrapper">
+            {userContext && (
+              <ContextSelector
+                web3={web3}
+                account={account}
+                supplyContract={supplyContract}
+                userContext={userContext}
+                txHistory={txHistory}
+                metamaskAddress={metamaskAddress}
+                upc={upc}
+              />
+            )}
+          </div>
+
+          <div className="TXHistory-Functionality-wrapper">
+            {userContext && txHistory && <TxHistory txHistory={txHistory} />}
+          </div>
+        </section>
+
         <footer>
           <Typography
             className="CoffeeCol-moto"

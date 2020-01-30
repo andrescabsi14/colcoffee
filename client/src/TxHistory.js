@@ -3,6 +3,7 @@ import { Typography } from "@material-ui/core";
 import "./TxHistory.scss";
 
 const TxHistory = ({ txHistory }) => {
+  console.warn(txHistory);
   return (
     <section className="TxHistory-wrapper">
       <Typography style={{ marginBottom: "20px" }} variant="h4">

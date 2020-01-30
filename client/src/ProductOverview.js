@@ -7,12 +7,18 @@ class ProductOverview extends React.Component {
   state = {
     upc: "",
     searchResult: null,
-    error: null
+    error: null,
+    loading: false
   };
 
   fetchData = async buffer => {
-    const { supplyContract, setError } = this.props;
-    const { accounts, upc } = this.state;
+    const {
+      supplyContract,
+      accounts,
+      setNotification,
+      setTxHistory
+    } = this.props;
+    const { upc } = this.state;
 
     if (!upc) {
       this.setState({
@@ -23,25 +29,33 @@ class ProductOverview extends React.Component {
 
     let fetchedItems;
 
-    try {
-      if (buffer === 2) {
-        fetchedItems = await supplyContract.methods
-          .fetchItemBufferTwo(upc)
-          .send({ from: accounts[0] });
-      } else {
-        fetchedItems = await supplyContract.methods
-          .fetchItemBufferOne(upc)
-          .send({ from: accounts[0] });
+    this.setState(
+      {
+        loading: true
+      },
+      async () => {
+        try {
+          if (buffer === 2) {
+            fetchedItems = await supplyContract.methods
+              .fetchItemBufferTwo(Number(upc))
+              .call({ from: accounts[0] });
+          } else {
+            fetchedItems = await supplyContract.methods
+              .fetchItemBufferOne(Number(upc))
+              .call({ from: accounts[0] });
+          }
+          setTxHistory(fetchedItems);
+          this.setState({
+            error: null,
+            loading: false
+          });
+          setNotification(`Buffer ${buffer} fetched successfully`);
+        } catch (err) {
+          this.setState({ error: err, loading: false });
+          console.log("Error in product overview");
+        }
       }
-
-      this.setState({
-        fetchedItems,
-        error: null
-      });
-    } catch (err) {
-      this.setState({ error: err });
-      console.log("Error in product overview");
-    }
+    );
   };
 
   changeUPC = value => {
@@ -50,8 +64,15 @@ class ProductOverview extends React.Component {
     });
   };
 
+  componentDidMount() {
+    this.setState({
+      upc: this.props.upc
+    });
+  }
+
   render() {
-    const { searchResult, upc, error } = this.state;
+    const { upc, error, loading } = this.state;
+
     return (
       <section className="ProductOverview-wrapper">
         <Typography variant="h4">Product Overview</Typography>
@@ -86,14 +107,15 @@ class ProductOverview extends React.Component {
             </Button>
           </div>
 
+          {loading && (
+            <div className="ProductOverview-loading">
+              Fetching Ethereum. Please wait...
+            </div>
+          )}
+
           {error && (
             <div className="ProductOverview-error">
               Error: {JSON.stringify(error)}
-            </div>
-          )}
-          {searchResult && (
-            <div className="ProductOverview-searchResult">
-              {JSON.stringify(searchResult)}
             </div>
           )}
         </div>

@@ -163,6 +163,12 @@ class App extends React.Component {
     }
   };
 
+  setTxHistory = searchResult => {
+    this.setState({
+      txHistory: searchResult
+    });
+  };
+
   componentDidMount = async () => {
     try {
       const web3 = await getWeb3();
@@ -299,6 +305,7 @@ class App extends React.Component {
                   upc={upc}
                   setError={this.setError}
                   setNotification={this.setNotification}
+                  setTxHistory={this.setTxHistory}
                 />
               )}
             </div>

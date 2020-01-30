@@ -20,7 +20,8 @@ const ContextSelector = ({
   metamaskAddress,
   upc,
   setError,
-  setNotification
+  setNotification,
+  setTxHistory
 }) => {
   switch (userContext) {
     case CONTEXT.farmer: {
@@ -40,7 +41,13 @@ const ContextSelector = ({
               setError={setError}
               setNotification={setNotification}
             />
-            <ProductOverview setError={setError} />
+            <ProductOverview
+              accounts={accounts}
+              supplyContract={supplyContract}
+              setNotification={setNotification}
+              setError={setError}
+              setTxHistory={setTxHistory}
+            />
           </div>
         </>
       );
@@ -62,7 +69,13 @@ const ContextSelector = ({
               setError={setError}
               setNotification={setNotification}
             />
-            <ProductOverview setError={setError} />
+            <ProductOverview
+              accounts={accounts}
+              supplyContract={supplyContract}
+              setNotification={setNotification}
+              setError={setError}
+              setTxHistory={setTxHistory}
+            />
           </div>
         </>
       );
@@ -84,7 +97,13 @@ const ContextSelector = ({
               setError={setError}
               setNotification={setNotification}
             />
-            <ProductOverview setError={setError} />
+            <ProductOverview
+              accounts={accounts}
+              supplyContract={supplyContract}
+              setNotification={setNotification}
+              setError={setError}
+              setTxHistory={setTxHistory}
+            />
           </div>
         </>
       );
@@ -107,8 +126,11 @@ const ContextSelector = ({
               setNotification={setNotification}
             />
             <ProductOverview
-              setError={setError}
+              accounts={accounts}
+              supplyContract={supplyContract}
               setNotification={setNotification}
+              setError={setError}
+              setTxHistory={setTxHistory}
             />
           </div>
         </>

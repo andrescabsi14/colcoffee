@@ -6,18 +6,25 @@ import "./FarmDetails.scss";
 class FarmDetails extends React.Component {
   state = {
     farmerId: "",
+    isFarmer: false,
     originFarmName: "",
     originFarmInformation: "",
     originFarmLatitude: "",
     originFarmLongitude: "",
-    error: null
+    error: null,
+    loading: false
   };
 
   createFarmer = async () => {
     const { supplyContract, setError, setNotification } = this.props;
-    const { farmerId } = this.state;
+    const { farmerId, isFarmer } = this.state;
+
+    this.setState({
+      loading: true
+    });
+
     try {
-      if (farmerId) {
+      if (isFarmer) {
         setNotification(`You are a registered farmer already.`);
         this.setState({
           farmerId
@@ -45,6 +52,7 @@ class FarmDetails extends React.Component {
 
   setLocalError = error => {
     this.setState({
+      loading: false,
       error: JSON.stringify(error)
     });
   };
@@ -58,6 +66,7 @@ class FarmDetails extends React.Component {
       originFarmLatitude,
       originFarmLongitude
     } = this.state;
+
     try {
       const newUPC = upc + 1;
       const harvestCoffee = await supplyContract.methods
@@ -75,6 +84,7 @@ class FarmDetails extends React.Component {
       setNotification(`Farmer harvested coffee successfully`);
       this.setState({
         error: null,
+        loading: false,
         originFarmName: "",
         originFarmInformation: "",
         originFarmLatitude: "",
@@ -89,6 +99,7 @@ class FarmDetails extends React.Component {
   processCoffee = async () => {
     const { upc, supplyContract, setNotification } = this.props;
     const { farmerId } = this.state;
+
     try {
       const processCoffee = await supplyContract.methods
         .processItem(upc)
@@ -96,7 +107,8 @@ class FarmDetails extends React.Component {
 
       setNotification(`Farmer processed coffee successfully`);
       this.setState({
-        error: null
+        error: null,
+        loading: false
       });
     } catch (err) {
       this.setLocalError(err);
@@ -107,6 +119,7 @@ class FarmDetails extends React.Component {
   packCoffee = async () => {
     const { upc, supplyContract, setNotification } = this.props;
     const { farmerId } = this.state;
+
     try {
       const packCoffee = await supplyContract.methods
         .packItem(upc)
@@ -114,7 +127,8 @@ class FarmDetails extends React.Component {
 
       setNotification(`Farmer packed the coffee successfully`);
       this.setState({
-        error: null
+        error: null,
+        loading: false
       });
     } catch (err) {
       this.setLocalError(err);
@@ -134,7 +148,8 @@ class FarmDetails extends React.Component {
 
       setNotification(`The coffee is for sale now`);
       this.setState({
-        error: null
+        error: null,
+        loading: false
       });
     } catch (err) {
       this.setLocalError(err);
@@ -151,6 +166,10 @@ class FarmDetails extends React.Component {
       originFarmLatitude,
       originFarmLongitude
     } = this.state;
+
+    this.setState({
+      loading: true
+    });
 
     switch (actionType) {
       case "harvest":
@@ -187,44 +206,38 @@ class FarmDetails extends React.Component {
   };
 
   isFarmer = async () => {
-    const { supplyContract } = this.props;
-    const { farmerId } = this.state;
-    const isFarmer = await supplyContract.methods.isFarmer(farmerId).call();
-
+    const { supplyContract, accounts } = this.props;
+    const isFarmer = await supplyContract.methods.isFarmer(accounts[0]).call();
     this.setState({
-      farmerId: isFarmer ? farmerId : ""
+      isFarmer,
+      farmerId: accounts[0]
     });
   };
 
   async componentDidMount() {
-    this.setState(
-      {
-        farmerId: this.props.accounts[0] || ""
-      },
-      async () => {
-        await this.isFarmer();
-      }
-    );
+    await this.isFarmer();
   }
 
   render() {
     const { accounts } = this.props;
     const {
+      isFarmer,
       farmerId,
       originFarmName,
       originFarmInformation,
       originFarmLatitude,
       originFarmLongitude,
-      error
+      error,
+      loading
     } = this.state;
     return (
       <section
         className={
-          farmerId ? "FarmDetail-wrapper extended" : "FarmDetail-wrapper"
+          isFarmer ? "FarmDetail-wrapper extended" : "FarmDetail-wrapper"
         }
       >
         <div className="FarmDetail-newfarmer">
-          {!farmerId ? (
+          {!isFarmer ? (
             <>
               <Typography variant="h4">Create Farmer user</Typography>
               <Typography variant="body1">
@@ -247,7 +260,7 @@ class FarmDetails extends React.Component {
                     multiline
                     rowsMax="1"
                     value={farmerId}
-                    disabled
+                    disabled={isFarmer ? true : false}
                   />
                 </div>
                 <Button
@@ -263,11 +276,16 @@ class FarmDetails extends React.Component {
             <>
               <Typography variant="h4">Farmer Address</Typography>
               <Typography variant="body1">{farmerId}</Typography>
+              {loading && (
+                <div className="FarmDetail-loading">
+                  Fetching Ethereum. Please wait...
+                </div>
+              )}
             </>
           )}
         </div>
 
-        {farmerId && (
+        {isFarmer && (
           <div className="FarmDetail-farmDetails">
             <Typography variant="h4">Edit Farm Details</Typography>
             <div className="FarmDetail-formWrapper">

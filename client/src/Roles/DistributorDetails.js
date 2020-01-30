@@ -5,24 +5,67 @@ import "./DistributorDetails.scss";
 
 class DistributorDetails extends React.Component {
   state = {
+    isDistributor: false,
     distributorId: null
   };
 
-  createDistributor = () => {
+  createDistributor = async () => {
+    const { supplyContract, setError, setNotification } = this.props;
+    const { isDistributor, distributorId } = this.state;
+    try {
+      if (isDistributor) {
+        setNotification(`You are a registered Distributor already.`);
+        this.setState({
+          distributorId
+        });
+      } else {
+        const newDistributorId = await supplyContract.methods
+          .addDistributor(distributorId)
+          .send({ from: distributorId });
+
+        setNotification(`Distributor id created for ${distributorId}`);
+        this.setState({
+          isDistributor: true,
+          distributorId: newDistributorId
+        });
+      }
+    } catch (err) {
+      setError(err);
+      console.log("Error mounting app");
+    }
+  };
+
+  isDistributor = async () => {
+    const { supplyContract, accounts } = this.props;
+    const { distributorId } = this.state;
+    const isDistributor = await supplyContract.methods
+      .isDistributor(distributorId)
+      .call();
+
     this.setState({
-      distributorId: 123
+      isDistributor,
+      distributorId: accounts[0]
     });
   };
-  handleChange = fieldId => {};
-  handleAction = actionType => {};
+
+  async componentDidMount() {
+    this.setState(
+      {
+        distributorId: this.props.accounts[0] || ""
+      },
+      async () => {
+        await this.isDistributor();
+      }
+    );
+  }
 
   render() {
-    const { txHistory, account } = this.props;
-    const { distributorId } = this.state;
+    const { accounts } = this.props;
+    const { isDistributor, loading } = this.state;
     return (
       <section
         className={
-          distributorId
+          isDistributor
             ? "DistributorDetails-wrapper extended"
             : "DistributorDetails-wrapper"
         }
@@ -40,7 +83,8 @@ class DistributorDetails extends React.Component {
                 label="Distributor ID"
                 multiline
                 rowsMax="1"
-                value={account}
+                value={accounts[0]}
+                disabled
               />
             </div>
             <Button
@@ -53,7 +97,12 @@ class DistributorDetails extends React.Component {
           </div>
         </div>
 
-        {distributorId && <ProductDetails />}
+        {isDistributor && <ProductDetails />}
+        {loading && (
+          <div className="DistributorDetails-loading">
+            Fetching Ethereum. Please wait...
+          </div>
+        )}
       </section>
     );
   }

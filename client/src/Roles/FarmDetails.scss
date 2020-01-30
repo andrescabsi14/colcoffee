@@ -58,6 +58,12 @@
     margin-bottom: 10px;
   }
 
+  &-loading {
+    margin-top: 20px;
+    color: #4caf50;
+    font-weight: 600;
+  }
+
   &-Error {
     color: red;
   }

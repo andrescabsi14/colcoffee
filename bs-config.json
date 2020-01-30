@@ -1,0 +1,6 @@
+{
+  "server": {
+    "baseDir": ["./build/contracts"],
+    "port": 8000
+  }
+}

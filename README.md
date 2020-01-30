@@ -38,10 +38,16 @@ Install all requisite npm packages (as listed in `package.json`):
 npm install
 ```
 
-Launch Ganache:
+Launch contracts server:
 
 ```
-npm run ganache
+npm run start
+```
+
+Launch client app:
+
+```
+cd cient && npm start
 ```
 
 Your terminal should look something like this:
